@@ -59,6 +59,18 @@ object MyModule {
     loop(0)
   }
 
+  def partial1[A, B, C](a: A, f: (A, B) => C): B => C = (b: B) => f(a, b)
+
+  def sum(v1: Int, v2: Int) = v1 + v2
+
+  def concat(str1: String, str2: String): String = str1 + " " + str2
+
+  def curry[A, B, C](f: (A, B) => C): A => (B => C) = (a: A) => (b: B) => f(a, b)
+
+  def uncurry[A, B, C](f: (A, B) => C): B => (A => C) = (b: B) => (a: A) => f(a, b)
+
+  def compose[A, B, C](f: B => C, g: A => B): A => C = (a: A) => f(g(a))
+
   def main(args: Array[String]): Unit = {
     println(formatResult("absolute value", -42, abs))
     println(formatResult("factorial", 7, factorial))
@@ -67,5 +79,19 @@ object MyModule {
     println(findFirst(Array(1, 2, 3, 4, 5), (value: Int) => value == 4))
     println(isSorted(Array(1, 2, 3, 4, 5, 6), (v1: Int, v2: Int) => v1 > v2))
     println(isSorted(Array(1, 2, 3, 4, 6, 5), (v1: Int, v2: Int) => v1 > v2))
+
+    println(sum(3, 5))
+    val sum3 = partial1(3, sum)
+    println(sum3(5))
+
+    val concatCurry = curry(concat)("Fizz")
+    println(concatCurry("Buzz"))
+
+    val concatUncurry = uncurry(concat)("Buzz")
+    println(concatUncurry("Fizz"))
+
+    val nameHiroaki = compose((b: String) => b + "Suzuki", (a: String) => a + " ")
+    println(nameHiroaki("Hiroaki"))
+    println(nameHiroaki("Moe"))
   }
 }
