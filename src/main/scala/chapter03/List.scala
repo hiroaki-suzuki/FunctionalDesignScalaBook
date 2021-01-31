@@ -104,6 +104,7 @@ object List {
 
   def sum3(l: List[Int]): Int = foldLeft(l, 0)(_ + _)
   def product3(l: List[Double]): Double = foldLeft(l, 1.0)(_ * _)
+
   def length2[A](l: List[A]): Int = foldLeft(l, 0)((acc, _) => acc + 1)
 
   def reverse[A](l: List[A]): List[A] =
@@ -114,4 +115,52 @@ object List {
     foldRight(l1, l2)(Cons(_, _))
 
   def concat[A](l: List[List[A]]): List[A] = foldRight(l, Nil: List[A])(append2)
+
+  def add1(l: List[Int]): List[Int] =
+    foldRight(l, Nil: List[Int])((h, t) => Cons(h + 1, t))
+
+  def toStr(l: List[Double]): List[String] =
+    foldLeft(l, Nil: List[String])((t, d) => Cons(d.toString, t))
+
+  def map[A, B](as: List[A])(f: A => B): List[B] =
+    foldRight(as, Nil: List[B])((h, t) => Cons(f(h), t))
+
+  def filter[A](as: List[A])(f: A => Boolean): List[A] =
+    foldRight(as, Nil: List[A])((h, t) => if (f(h)) Cons(h, t) else t)
+
+  def flatMap[A, B](as: List[A])(f: A => List[B]): List[B] =
+    concat(map(as)(f))
+
+  def filter2[A](as: List[A])(f: A => Boolean): List[A] =
+    flatMap(as)(h => if (f(h)) List(h) else Nil)
+
+  def plusList(as: List[Int], bs: List[Int]): List[Int] =
+    (as, bs) match {
+      case (Nil, _)                   => Nil
+      case (_, Nil)                   => Nil
+      case (Cons(a, as), Cons(b, bs)) => Cons(a + b, plusList(as, bs))
+    }
+
+  def zipWith[A](as: List[A], bs: List[A])(f: (A, A) => A): List[A] =
+    (as, bs) match {
+      case (Nil, _)                   => Nil
+      case (_, Nil)                   => Nil
+      case (Cons(a, as), Cons(b, bs)) => Cons(f(a, b), zipWith(as, bs)(f))
+    }
+
+  @annotation.tailrec
+  def startsWith[A](l: List[A], prefix: List[A]): Boolean =
+    (l, prefix) match {
+      case (_, Nil)                              => true
+      case (Cons(h, t), Cons(h2, t2)) if h == h2 => startsWith(t, t2)
+      case _                                     => false
+    }
+
+  @tailrec
+  def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean =
+    sup match {
+      case Nil                       => sub == Nil
+      case _ if startsWith(sup, sub) => true
+      case Cons(_, t)                => hasSubsequence(t, sub)
+    }
 }

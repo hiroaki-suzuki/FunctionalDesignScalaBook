@@ -52,4 +52,24 @@ object Main extends App {
   println(List.append2(List(1, 2, 3), List(4, 5, 6)))
 
   println(List.concat(List(List(1, 2, 3), List(4, 5, 6), List(7, 8, 9))))
+
+  println(List.add1(List(1, 2, 3)))
+
+  println(List.toStr(List(1.0, 1.5, 2.2)))
+
+  println(List.map(List(1, 2, 3))(_ + 1))
+  println(List.map(List("Hiroaki", "Moe", "Haruto", "Tomohiro"))(_ + " Suzuki"))
+  println(List.filter(List(1, 2, 3, 4, 5))(_ > 3))
+
+  println(List.flatMap(List(1, 2, 3))(i => List(i, i)))
+  println(List.filter2(List(1, 2, 3, 4, 5))(_ > 3))
+
+  println(List.plusList(List(1, 2, 3), List(4, 5, 6)))
+
+  println(List.zipWith(List(1, 2, 3), List(4, 5, 6))(_ + _))
+  println(
+    List.zipWith(List("Hiro", "Moe"), List("Suzuki", "Kawasaki"))(_ + " " + _)
+  )
+
+  println(List.hasSubsequence(List(1, 2, 3, 4), List(2, 3)))
 }
